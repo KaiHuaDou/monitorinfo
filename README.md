@@ -1,1 +1,1 @@
-# monitorinfo
+﻿# 显示器色域检测

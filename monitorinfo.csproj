@@ -9,11 +9,7 @@
     <ItemGroup>
         <None Remove="monitorinfo.ico" />
         <Resource Include="monitorinfo.ico" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Properties\" />
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+        <Folder Include="Properties\" />
+        <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     </ItemGroup>
 </Project>

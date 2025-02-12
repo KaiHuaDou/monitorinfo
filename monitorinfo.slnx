@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/解决方案项/">
+    <File Path=".github/workflows/build.yml" />
+  </Folder>
+  <Project Path="monitorinfo.csproj" />
+</Solution>
