@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net462</TargetFramework>
+        <TargetFramework>net6.0-windows</TargetFramework>
         <UseWPF>True</UseWPF>
         <ApplicationIcon>monitorinfo.ico</ApplicationIcon>
         <LangVersion>latest</LangVersion>
@@ -10,6 +10,6 @@
         <None Remove="monitorinfo.ico" />
         <Resource Include="monitorinfo.ico" />
         <Folder Include="Properties\" />
-        <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+        <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     </ItemGroup>
 </Project>

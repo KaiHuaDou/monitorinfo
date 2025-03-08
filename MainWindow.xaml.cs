@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace monitorinfo;
 
@@ -41,12 +40,12 @@ public partial class MainWindow : Window
     {
         if (MonitorBox.SelectedIndex == -1)
             return;
-        info.GetFrom(EDIDs[MonitorBox.SelectedIndex].monitorEDID);
+        info.Get(EDIDs[MonitorBox.SelectedIndex].monitorEDID);
         ImageGamut.Source = GamutImage.Draw(info);
     }
 
-    private void SetClipboard(object o, MouseButtonEventArgs e)
+    private void SetClipboard(object o, RoutedEventArgs e)
     {
-        Clipboard.SetDataObject(LblProductID.Content);
+        Clipboard.SetText(LblProductID.Content.ToString( ));
     }
 }

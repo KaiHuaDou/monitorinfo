@@ -73,15 +73,18 @@
             <Label Grid.Row="6" Grid.Column="0" Content="产品ID/型号：" />
             <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
                 <Label x:Name="LblProductID" Content="{Binding MonitorDataString}" />
-                <TextBlock x:Name="CopyProductBox"
-                           Foreground="#FF0C7DF7"
-                           MouseDown="SetClipboard" Text="复制" TextDecorations="UnderLine" />
+                <Button x:Name="CopyProductButton"
+                        Padding="5,0,5,0"
+                        Background="Transparent"
+                        Click="SetClipboard">
+                    <TextBlock Foreground="#FF0C7DF7" Text="复制" TextDecorations="UnderLine" />
+                </Button>
             </StackPanel>
-            <Label Grid.Row="7" Grid.Column="0" Content="NTSC色域：" />
+            <Label Grid.Row="7" Grid.Column="0" Content="NTSC 色域：" />
             <Label x:Name="LblNTSCGamut"
                    Grid.Row="7" Grid.Column="1"
                    Content="{Binding NTSCGamut}" />
-            <Label Grid.Row="8" Grid.Column="0" Content="sRGB色域：" />
+            <Label Grid.Row="8" Grid.Column="0" Content="sRGB 色域：" />
             <Label x:Name="LblSRGBGamut"
                    Grid.Row="8" Grid.Column="1"
                    Content="{Binding SRGBGamut}" />
@@ -97,7 +100,7 @@
             <Label x:Name="LblProductionDate"
                    Grid.Row="11" Grid.Column="1"
                    Content="{Binding ProductionDate}" />
-            <Label Grid.Row="12" Grid.Column="0" Content="EDID版本：" />
+            <Label Grid.Row="12" Grid.Column="0" Content="EDID 版本：" />
             <Label x:Name="LblEDIDVersion"
                    Grid.Row="12" Grid.Column="1"
                    Content="{Binding EDIDVersion}" />
@@ -107,9 +110,9 @@
                     Click="RefreshMonitor" Content="重新检测" />
         </Grid>
         <DockPanel Margin="20">
-            <Label DockPanel.Dock="Bottom" Content="——:标准NTSC色彩范围" />
-            <Label DockPanel.Dock="Bottom" Content="·········:标准sRGB色彩范围" />
-            <Label DockPanel.Dock="Bottom" Content="-----:当前设备的色彩范围" />
+            <Label DockPanel.Dock="Bottom" Content="——(白):标准NTSC色彩范围" />
+            <Label DockPanel.Dock="Bottom" Content="·········(白):标准sRGB色彩范围" />
+            <Label DockPanel.Dock="Bottom" Content="-----(黑):当前设备的色彩范围" />
             <Image x:Name="ImageGamut"
                    Width="600" Height="600"
                    Stretch="UniformToFill" />
