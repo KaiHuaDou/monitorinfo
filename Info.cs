@@ -7,14 +7,14 @@ namespace monitorinfo;
 
 public class Info : INotifyPropertyChanged
 {
-    private string axesBlueX;
-    private string axesBlueY;
-    private string axesGreenX;
-    private string axesGreenY;
-    private string axesRedX;
-    private string axesRedY;
-    private string axesWhiteX;
-    private string axesWhiteY;
+    private string bX;
+    private string bY;
+    private string gX;
+    private string gY;
+    private string rX;
+    private string rY;
+    private string wX;
+    private string wY;
     private string colorFormat;
     private string edidVersion;
     private string manufacturerName;
@@ -56,212 +56,107 @@ public class Info : INotifyPropertyChanged
     private string srgbGamut;
 
     public event PropertyChangedEventHandler PropertyChanged;
-
-    public string AxesBlueX
+    protected void OnPropertyChanged(string propertyName)
     {
-        get => axesBlueX;
-        set
-        {
-            axesBlueX = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(AxesBlueX)));
-        }
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    public string AxesBlueY
+    public string BX
     {
-        get => axesBlueY;
-        set
-        {
-            axesBlueY = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(AxesBlueY)));
-        }
+        get => bX;
+        set { bX = value; OnPropertyChanged(nameof(BX)); }
     }
 
-    public string AxesGreenX
+    public string BY
     {
-        get => axesGreenX;
-        set
-        {
-            axesGreenX = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(AxesGreenX)));
-        }
+        get => bY;
+        set { bY = value; OnPropertyChanged(nameof(BY)); }
     }
 
-    public string AxesGreenY
+    public string GX
     {
-        get => axesGreenY;
-        set
-        {
-            axesGreenY = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs("axesGreenY"));
-        }
+        get => gX;
+        set { gX = value; OnPropertyChanged(nameof(GX)); }
     }
 
-    public string AxesRedX
+    public string GY
     {
-        get => axesRedX;
-        set
-        {
-            axesRedX = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(AxesRedX)));
-        }
+        get => gY;
+        set { gY = value; OnPropertyChanged(nameof(GY)); }
     }
 
-    public string AxesRedY
+    public string RX
     {
-        get => axesRedY;
-        set
-        {
-            axesRedY = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(AxesRedY)));
-        }
+        get => rX;
+        set { rX = value; OnPropertyChanged(nameof(RX)); }
     }
 
-    public string AxesWhiteX
+    public string RY
     {
-        get => axesWhiteX;
-        set
-        {
-            axesWhiteX = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(AxesWhiteX)));
-        }
+        get => rY;
+        set { rY = value; OnPropertyChanged(nameof(RY)); }
     }
 
-    public string AxesWhiteY
+    public string WX
     {
-        get => axesWhiteY;
-        set
-        {
-            axesWhiteY = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(AxesWhiteY)));
-        }
+        get => wX;
+        set { wX = value; OnPropertyChanged(nameof(WX)); }
+    }
+
+    public string WY
+    {
+        get => wY;
+        set { wY = value; OnPropertyChanged(nameof(WY)); }
     }
 
     public string ColorFormat
     {
         get => colorFormat;
-        set
-        {
-            colorFormat = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(ColorFormat)));
-        }
+        set { colorFormat = value; OnPropertyChanged(nameof(ColorFormat)); }
     }
 
     public string EDIDVersion
     {
         get => edidVersion;
-        set
-        {
-            edidVersion = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(EDIDVersion)));
-        }
+        set { edidVersion = value; OnPropertyChanged(nameof(EDIDVersion)); }
     }
 
     public string ManufacturerName
     {
         get => manufacturerName;
-        set
-        {
-            manufacturerName = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(ManufacturerName)));
-        }
+        set { manufacturerName = value; OnPropertyChanged(nameof(ManufacturerName)); }
     }
 
     public string MonitorDataString
     {
         get => monitorDataString;
-        set
-        {
-            monitorDataString = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(MonitorDataString)));
-        }
+        set { monitorDataString = value; OnPropertyChanged(nameof(MonitorDataString)); }
     }
+
     public string NTSCGamut
     {
         get => ntscGamut;
-        set
-        {
-            ntscGamut = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs("ColorGamut"));
-        }
+        set { ntscGamut = value; OnPropertyChanged(nameof(NTSCGamut)); }
     }
 
     public string PhysicalSize
     {
         get => physicalSize;
-        set
-        {
-            physicalSize = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(PhysicalSize)));
-        }
+        set { physicalSize = value; OnPropertyChanged(nameof(PhysicalSize)); }
     }
 
     public string ProductionDate
     {
         get => productionDate;
-        set
-        {
-            productionDate = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs(nameof(ProductionDate)));
-        }
+        set { productionDate = value; OnPropertyChanged(nameof(ProductionDate)); }
     }
+
     public string SRGBGamut
     {
         get => srgbGamut;
-        set
-        {
-            srgbGamut = value;
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged == null)
-                return;
-            propertyChanged(this, new PropertyChangedEventArgs("ColorGamut"));
-        }
+        set { srgbGamut = value; OnPropertyChanged(nameof(SRGBGamut)); }
     }
+
     public void Get(byte[] monitorEDID)
     {
         MonitorDataString = GetMonitorDataString(monitorEDID);
@@ -271,14 +166,14 @@ public class Info : INotifyPropertyChanged
         PhysicalSize = GetMonitorPhysicalSize(monitorEDID);
         ColorFormat = GetColorFormat(monitorEDID);
         string[] monitorColorInfo = GetMonitorColorInfo(monitorEDID);
-        AxesRedX = monitorColorInfo[0];
-        AxesRedY = monitorColorInfo[1];
-        AxesGreenX = monitorColorInfo[2];
-        AxesGreenY = monitorColorInfo[3];
-        AxesBlueX = monitorColorInfo[4];
-        AxesBlueY = monitorColorInfo[5];
-        AxesWhiteX = monitorColorInfo[6];
-        AxesWhiteY = monitorColorInfo[7];
+        RX = monitorColorInfo[0];
+        RY = monitorColorInfo[1];
+        GX = monitorColorInfo[2];
+        GY = monitorColorInfo[3];
+        BX = monitorColorInfo[4];
+        BY = monitorColorInfo[5];
+        WX = monitorColorInfo[6];
+        WY = monitorColorInfo[7];
         NTSCGamut = monitorColorInfo[8];
         SRGBGamut = monitorColorInfo[9];
     }
@@ -318,8 +213,8 @@ public class Info : INotifyPropertyChanged
         double num7 = (4 * monitorEDID[33] + (monitorEDID[26] & 3)) / 1023.0;
         double num8 = (4 * monitorEDID[34] + (monitorEDID[26] & 3)) / 1023.0;
         double[] array = [num, num2, num3, num4, num5, num6, num7, num8];
-        string text = (Math.Abs(array[0] * array[3] + array[2] * array[5] + array[4] * array[1] - array[0] * array[5] - array[2] * array[1] - array[4] * array[3]) / 2.0 / 0.1582).ToString("P") + " NTSC";
-        string text2 = (Math.Abs(array[0] * array[3] + array[2] * array[5] + array[4] * array[1] - array[0] * array[5] - array[2] * array[1] - array[4] * array[3]) / 2.0 / 0.1582 / 0.72).ToString("P") + " sRGB";
+        string NTSCPercent = (Math.Abs(array[0] * array[3] + array[2] * array[5] + array[4] * array[1] - array[0] * array[5] - array[2] * array[1] - array[4] * array[3]) / 2.0 / 0.1582).ToString("P") + " NTSC";
+        string sRGBPercent = (Math.Abs(array[0] * array[3] + array[2] * array[5] + array[4] * array[1] - array[0] * array[5] - array[2] * array[1] - array[4] * array[3]) / 2.0 / 0.1582 / 0.72).ToString("P") + " sRGB";
         return
         [
             num.ToString("0.000"),
@@ -330,8 +225,8 @@ public class Info : INotifyPropertyChanged
             num6.ToString("0.000"),
             num7.ToString("0.000"),
             num8.ToString("0.000"),
-            text,
-            text2
+            NTSCPercent,
+            sRGBPercent
         ];
     }
 

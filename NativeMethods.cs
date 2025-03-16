@@ -4,7 +4,7 @@ using System;
 
 namespace monitorinfo;
 
-internal sealed class NativeMethods
+internal static class NativeMethods
 {
     [DllImport("advapi32.dll", SetLastError = true)]
     public static extern uint RegEnumValue(UIntPtr hKey, uint dwIndex, StringBuilder lpValueName, ref uint lpcValueName, IntPtr lpReserved, IntPtr lpType, IntPtr lpData, ref int lpcbData);

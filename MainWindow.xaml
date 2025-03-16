@@ -37,35 +37,35 @@
             <Label Grid.Row="1" Grid.Column="0" Content="RedX:" />
             <Label x:Name="LblRedX"
                    Grid.Row="1" Grid.Column="1"
-                   Content="{Binding AxesRedX}" />
+                   Content="{Binding RX}" />
             <Label Grid.Row="1" Grid.Column="2" Content="RedY:" />
             <Label x:Name="LblRedY"
                    Grid.Row="1" Grid.Column="3"
-                   Content="{Binding AxesRedY}" />
+                   Content="{Binding RY}" />
             <Label Grid.Row="2" Grid.Column="0" Content="GreenX:" />
             <Label x:Name="LblGreenX"
                    Grid.Row="2" Grid.Column="1"
-                   Content="{Binding AxesGreenX}" />
+                   Content="{Binding GX}" />
             <Label Grid.Row="2" Grid.Column="2" Content="GreenY:" />
             <Label x:Name="LblGreenY"
                    Grid.Row="2" Grid.Column="3"
-                   Content="{Binding AxesGreenY}" />
+                   Content="{Binding GY}" />
             <Label Grid.Row="3" Grid.Column="0" Content="BlueX:" />
             <Label x:Name="LblBlueX"
                    Grid.Row="3" Grid.Column="1"
-                   Content="{Binding AxesBlueX}" />
+                   Content="{Binding BX}" />
             <Label Grid.Row="3" Grid.Column="2" Content="BlueY:" />
             <Label x:Name="LblBlueY"
                    Grid.Row="3" Grid.Column="3"
-                   Content="{Binding AxesBlueY}" />
+                   Content="{Binding BY}" />
             <Label Grid.Row="4" Grid.Column="0" Content="WhiteX:" />
             <Label x:Name="LblWhiteX"
                    Grid.Row="4" Grid.Column="1"
-                   Content="{Binding AxesWhiteX}" />
+                   Content="{Binding WX}" />
             <Label Grid.Row="4" Grid.Column="2" Content="WhiteY:" />
             <Label x:Name="LblWhiteY"
                    Grid.Row="4" Grid.Column="3"
-                   Content="{Binding AxesWhiteY}" />
+                   Content="{Binding WY}" />
             <Label Grid.Row="5" Grid.Column="0" Content="制造商：" />
             <Label x:Name="LblManufacturerName"
                    Grid.Row="5" Grid.Column="1"
@@ -109,13 +109,9 @@
                     Margin="10" Padding="20,5"
                     Click="RefreshMonitor" Content="重新检测" />
         </Grid>
-        <DockPanel Margin="20">
-            <Label DockPanel.Dock="Bottom" Content="——(白):标准NTSC色彩范围" />
-            <Label DockPanel.Dock="Bottom" Content="·········(白):标准sRGB色彩范围" />
-            <Label DockPanel.Dock="Bottom" Content="-----(黑):当前设备的色彩范围" />
-            <Image x:Name="ImageGamut"
-                   Width="600" Height="600"
-                   Stretch="UniformToFill" />
-        </DockPanel>
+        <Image x:Name="ImageGamut"
+               Width="600" Height="600"
+               Margin="20"
+               Stretch="UniformToFill" />
     </DockPanel>
 </Window>

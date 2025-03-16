@@ -11,5 +11,8 @@
         <Resource Include="monitorinfo.ico" />
         <Folder Include="Properties\" />
         <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+        <None Update="chroma.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 </Project>

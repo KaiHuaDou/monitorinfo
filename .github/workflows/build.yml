@@ -17,6 +17,9 @@ jobs:
 
       - name: Install .NET
         uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.x'
+          cache: true
 
       - name: Build Solution
         run: dotnet pubilsh -p:PublishProfile=FolderProfile

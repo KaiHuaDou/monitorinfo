@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
@@ -8,18 +10,14 @@ namespace monitorinfo;
 
 public static class GamutImage
 {
-    public const int ImageSize = 600;
-    private const int RGB_DATA_ARR_LEN = 800;
+    public const int ImageSize = 900;
+    private const int RGB_DATA_ARR_LEN = 1600;
+    private const int AxeUnit = 10;
+    private const int Border = 60;
+    private const int Size = ImageSize - Border;
+    private const double Step = (double) Size / RGB_DATA_ARR_LEN;
 
-    private static int AxeUnit = 10;
-    private static int BorderBottom = 30;
-    private static int BorderLeft = 30;
-    private static readonly int ActualWidth = ImageSize - BorderLeft;
-    private static readonly int ActualHeight = ImageSize - BorderBottom;
-    private static int ActualSize = Math.Min(ActualWidth, ActualHeight);
-    private static double ActualStep = (double) ActualSize / RGB_DATA_ARR_LEN;
-
-    private static Font Font = new("Serif", 9f);
+    private static Font Font = new("Serif", 12f);
     private static Graphics Graphics;
     private static GraphicsPath GraphicsPath;
     private static Pen Pen;
@@ -59,39 +57,39 @@ public static class GamutImage
         Region.Union(GraphicsPath);
         Graphics.ExcludeClip(Region);
         SolidBrush solidBrush = new(Color.White);
-        Graphics.FillRectangle(solidBrush, new Rectangle(0, ActualHeight - ActualSize, ActualSize + BorderLeft, ActualSize + BorderBottom));
+        Graphics.FillRectangle(solidBrush, new Rectangle(0, Size - Size, Size + Border, Size + Border));
         Graphics.ResetClip( );
         Pen = new Pen(Color.Gray, 1f) { EndCap = LineCap.Flat };
         for (int i = 0; i <= AxeUnit; i++)
         {
             Pen.DashStyle = i == 0 ? DashStyle.Solid : DashStyle.Dash;
             string text = (i / (double) AxeUnit).ToString("f1");
-            int AxeStep = ActualSize * i / AxeUnit;
+            int AxeStep = Size * i / AxeUnit;
             SizeF sizeF = Graphics.MeasureString(text, Font);
 
-            Graphics.DrawLine(Pen, BorderLeft + AxeStep, ActualHeight, BorderLeft + AxeStep, ActualHeight - ActualSize);
-            PointF pointX = new(BorderLeft + AxeStep - sizeF.Width / 2f, ActualHeight);
+            Graphics.DrawLine(Pen, Border + AxeStep, Size, Border + AxeStep, Size - Size);
+            PointF pointX = new(Border + AxeStep - sizeF.Width / 2f, Size);
             Graphics.DrawString(text, Font, Brushes.Gray, pointX);
 
-            Graphics.DrawLine(Pen, BorderLeft, ActualHeight - AxeStep, BorderLeft + ActualSize, ActualHeight - AxeStep);
-            PointF pointY = new(BorderLeft - sizeF.Width, ActualHeight - AxeStep - sizeF.Height / 2f);
+            Graphics.DrawLine(Pen, Border, Size - AxeStep, Border + Size, Size - AxeStep);
+            PointF pointY = new(Border - sizeF.Width, Size - AxeStep - sizeF.Height / 2f);
             Graphics.DrawString(text, Font, Brushes.Gray, pointY);
         }
     }
 
     private static void DrawChroma( )
     {
-        Point[] chromaticity = new Point[81];
-        for (int i = 0; i < 81; i++)
+        HashSet<Point> chromaticity = [];
+        foreach (double k in ColorSpace.SpectralChromaticity.Keys)
         {
-            chromaticity[i] = new Point(
-                BorderLeft + (int) (ColorSpace.SpectralChromaticity[i, 0] * RGB_DATA_ARR_LEN * ActualStep),
-                ActualSize - (int) (ColorSpace.SpectralChromaticity[i, 1] * RGB_DATA_ARR_LEN * ActualStep)
-            );
+            chromaticity.Add(new Point(
+                Border + (int) (k * RGB_DATA_ARR_LEN * Step),
+                Size - (int) (ColorSpace.SpectralChromaticity[k] * RGB_DATA_ARR_LEN * Step)
+            ));
         }
         Pen = new(Color.Black);
-        Graphics.DrawPolygon(Pen, chromaticity);
-        GraphicsPath.AddPolygon(chromaticity);
+        Graphics.DrawPolygon(Pen, chromaticity.ToArray( ));
+        GraphicsPath.AddPolygon(chromaticity.ToArray( ));
     }
 
     private static void DrawColorSpace( )
@@ -114,8 +112,8 @@ public static class GamutImage
                 int B = Convert.ToInt32(Bf[i, j] * 255.0);
                 if (R < 0 || R >= 256 || G < 0 || G >= 256 || B < 0 || B >= 256)
                     continue;
-                int actualX = BorderLeft + (int) (i * ActualStep) - 1;
-                int actualY = ImageSize - (int) (j * ActualStep) - 1;
+                int actualX = Border + (int) (i * Step) - 1;
+                int actualY = ImageSize - (int) (j * Step) - 1;
                 if (actualX >= RGBImage.Width || actualY >= RGBImage.Height)
                     continue;
                 RGBImage.SetPixel(actualX, actualY, Color.FromArgb(R, G, B));
@@ -125,54 +123,42 @@ public static class GamutImage
 
     private static void DrawRegions(Info info)
     {
-        Pen.Color = Color.White;
-        Pen.Width = 4f;
         Pen.DashStyle = DashStyle.Solid;
-        int NTSC_x1 = Convert.ToInt16(BorderLeft + 0.67 * ActualSize);
-        int NSTC_y1 = ActualHeight - Convert.ToInt16(0.33 * ActualSize);
-        int NTSC_x2 = Convert.ToInt16(BorderLeft + 0.21 * ActualSize);
-        int NTSC_y2 = ActualHeight - Convert.ToInt16(0.71 * ActualSize);
-        int NTSC_x3 = Convert.ToInt16(BorderLeft + 0.14 * ActualSize);
-        int NTSC_y3 = ActualHeight - Convert.ToInt16(0.08 * ActualSize);
-        double NTSC_Area = TriangleArea(NTSC_x1, NSTC_y1, NTSC_x2, NTSC_y2, NTSC_x3, NTSC_y3);
-        Graphics.DrawLine(Pen, NTSC_x1, NSTC_y1, NTSC_x2, NTSC_y2);
-        Graphics.DrawLine(Pen, NTSC_x1, NSTC_y1, NTSC_x3, NTSC_y3);
-        Graphics.DrawLine(Pen, NTSC_x2, NTSC_y2, NTSC_x3, NTSC_y3);
 
-        Pen.Color = Color.Black;
-        Pen.Width = 2f;
-        Pen.DashStyle = DashStyle.Dash;
-        int self_x1 = Convert.ToInt16(BorderLeft + Convert.ToDouble(info.AxesRedX) * ActualSize);
-        int self_y1 = ActualHeight - Convert.ToInt16(Convert.ToDouble(info.AxesRedY) * ActualSize);
-        int sefl_x2 = Convert.ToInt16(BorderLeft + Convert.ToDouble(info.AxesBlueX) * ActualSize);
-        int self_y2 = ActualHeight - Convert.ToInt16(Convert.ToDouble(info.AxesBlueY) * ActualSize);
-        int self_x3 = Convert.ToInt16(BorderLeft + Convert.ToDouble(info.AxesGreenX) * ActualSize);
-        int self_y3 = ActualHeight - Convert.ToInt16(Convert.ToDouble(info.AxesGreenY) * ActualSize);
-        double self_Area = TriangleArea(self_x1, self_y1, sefl_x2, self_y2, self_x3, self_y3);
-        Graphics.DrawLine(Pen, self_x1, self_y1, sefl_x2, self_y2);
-        Graphics.DrawLine(Pen, self_x1, self_y1, self_x3, self_y3);
-        Graphics.DrawLine(Pen, sefl_x2, self_y2, self_x3, self_y3);
+        double custom_Area = DrawTriangle(Convert.ToDouble(info.RX), Convert.ToDouble(info.RY), Convert.ToDouble(info.BX), Convert.ToDouble(info.BY), Convert.ToDouble(info.GX), Convert.ToDouble(info.GY), Color.White);
+        double sRGB_Area = DrawTriangle(0.64, 0.33, 0.30, 0.60, 0.15, 0.06, Color.Black);
+        double DCIP3_Area = DrawTriangle(0.68, 0.32, 0.265, 0.69, 0.15, 0.06, Color.OrangeRed);
+        double NTSC_Area = DrawTriangle(0.67, 0.33, 0.21, 0.71, 0.14, 0.08, Color.MediumBlue);
+        //double BT2020_Area = DrawTriangle(0.708, 0.292, 0.170, 0.797, 0.131, 0.046, Color.Green);
 
-        Pen.Color = Color.White;
-        Pen.Width = 4f;
-        Pen.DashStyle = DashStyle.Dot;
-        int sRGB_x1 = Convert.ToInt16(BorderLeft + 0.64 * ActualSize);
-        int sRGB_y1 = NSTC_y1;
-        int sRGB_x2 = Convert.ToInt16(BorderLeft + 0.3 * ActualSize);
-        int sRGB_y2 = ActualHeight - Convert.ToInt16(0.6 * ActualSize);
-        int sRGB_x3 = Convert.ToInt16(BorderLeft + 0.15 * ActualSize);
-        int sRGB_y3 = ActualHeight - Convert.ToInt16(0.06 * ActualSize);
-        double sRGB_Area = TriangleArea(sRGB_x1, sRGB_y1, sRGB_x2, sRGB_y2, sRGB_x3, sRGB_y3);
-        Graphics.DrawLine(Pen, sRGB_x1, sRGB_y1, sRGB_x2, sRGB_y2);
-        Graphics.DrawLine(Pen, sRGB_x1, sRGB_y1, sRGB_x3, sRGB_y3);
-        Graphics.DrawLine(Pen, sRGB_x2, sRGB_y2, sRGB_x3, sRGB_y3);
-
-        Graphics.DrawString($"_sRGB: {Math.Round(self_Area / sRGB_Area * 100, 2)}%", new Font("Serif", 11f), Brushes.Black, ActualSize - 150, 10);
-        Graphics.DrawString($"_NTSC: {Math.Round(self_Area / NTSC_Area * 100, 2)}%", new Font("Serif", 11f), Brushes.Black, ActualSize - 150, 40);
+        Graphics.DrawString($"sRGB(黑): {Math.Round(custom_Area / sRGB_Area * 100, 2)}%", Font, Brushes.Black, Size - 175, 10);
+        Graphics.DrawString($"DCI-P3(红): {Math.Round(custom_Area / DCIP3_Area * 100, 2)}%", Font, Brushes.Black, Size - 175, 40);
+        Graphics.DrawString($"NTSC(蓝): {Math.Round(custom_Area / NTSC_Area * 100, 2)}%", Font, Brushes.Black, Size - 175, 70);
+        //Graphics.DrawString($"BT.2020(绿): {Math.Round(custom_Area / BT2020_Area * 100, 2)}%", Font, Brushes.Black, Size - 175, 100);
     }
 
-    private static double TriangleArea(double x1, double y1, double x2, double y2, double x3, double y3)
+    private static double DrawTriangle(double x1, double y1, double x2, double y2, double x3, double y3, Color color)
     {
-        return Math.Abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0;
+        Point p1 = new(Convert.ToInt16(Border + x1 * Size), Size - Convert.ToInt16(y1 * Size));
+        Point p2 = new(Convert.ToInt16(Border + x2 * Size), Size - Convert.ToInt16(y2 * Size));
+        Point p3 = new(Convert.ToInt16(Border + x3 * Size), Size - Convert.ToInt16(y3 * Size));
+        double area = TriangleArea(p1, p2, p3);
+        Pen.Color = Color.White;
+        Pen.Width = 5f;
+        Graphics.DrawLine(Pen, p1, p2);
+        Graphics.DrawLine(Pen, p1, p3);
+        Graphics.DrawLine(Pen, p2, p3);
+        Pen.Color = color;
+        Pen.Width = 2f;
+        Graphics.DrawLine(Pen, p1, p2);
+        Graphics.DrawLine(Pen, p1, p3);
+        Graphics.DrawLine(Pen, p2, p3);
+
+        return area;
+    }
+
+    private static double TriangleArea(Point a, Point b, Point c)
+    {
+        return Math.Abs(a.X * (b.Y - c.Y) + b.X * (c.Y - a.Y) + c.X * (a.Y - b.Y)) / 2.0;
     }
 }
